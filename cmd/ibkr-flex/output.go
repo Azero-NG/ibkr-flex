@@ -184,6 +184,47 @@ func renderNAV(items []flex.NAVEntry) error {
 	}
 }
 
+func renderNAVChanges(items []flex.NAVChange) error {
+	switch globals.format {
+	case "json", "":
+		return renderJSON(items)
+	case "table":
+		w := newTableWriter()
+		fmt.Fprintln(w, "Date\tCcy\tStart\tEnd\tMTM\tFX\tDivs\tInt\tComm\tWHT\tDep/Wd\tGrant\tTWR%")
+		for _, n := range items {
+			fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
+				n.Date, n.Currency,
+				formatFloat(n.StartingValue), formatFloat(n.EndingValue),
+				formatFloat(n.MTM), formatFloat(n.FxTranslation+n.NetFxTrading),
+				formatFloat(n.Dividends+n.ChangeInDividendAccruals),
+				formatFloat(n.Interest), formatFloat(n.Commissions),
+				formatFloat(n.WithholdingTax), formatFloat(n.DepositsWithdrawals),
+				formatFloat(n.GrantActivity), formatFloat(n.TWR))
+		}
+		return w.Flush()
+	case "csv":
+		w := newCSVWriter()
+		w.Write([]string{"date", "currency", "startingValue", "endingValue", "mtm", "realized", "changeInUnrealized", "fxTranslation", "netFxTrading", "dividends", "changeInDividendAccruals", "interest", "commissions", "otherFees", "withholdingTax", "depositsWithdrawals", "grantActivity", "twr", "account"})
+		for _, n := range items {
+			w.Write([]string{
+				n.Date, n.Currency,
+				formatFloat(n.StartingValue), formatFloat(n.EndingValue),
+				formatFloat(n.MTM), formatFloat(n.Realized), formatFloat(n.ChangeInUnrealized),
+				formatFloat(n.FxTranslation), formatFloat(n.NetFxTrading),
+				formatFloat(n.Dividends), formatFloat(n.ChangeInDividendAccruals),
+				formatFloat(n.Interest), formatFloat(n.Commissions),
+				formatFloat(n.OtherFees), formatFloat(n.WithholdingTax),
+				formatFloat(n.DepositsWithdrawals), formatFloat(n.GrantActivity),
+				formatFloat(n.TWR), n.Account,
+			})
+		}
+		w.Flush()
+		return w.Error()
+	default:
+		return unknownFormatErr()
+	}
+}
+
 func renderMTM(items []flex.MTMEntry) error {
 	switch globals.format {
 	case "json", "":

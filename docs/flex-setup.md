@@ -28,14 +28,27 @@
 7. **Save** the query.
 8. Note the **Query ID** column — a 7-digit number like `1234567`.
 
-## 3. Set environment variables
+## 3. Provide credentials to the CLI
 
+Two options, env wins when both are set.
+
+**Env vars** (one-shot):
 ```bash
 export IBKR_FLEX_TOKEN=1111222233334444
 export IBKR_FLEX_QUERY_ID=1234567
 ```
 
-Persist them in `~/.zshrc` / `~/.bashrc`, or use a `.env` loader of your choice (the binary itself doesn't read `.env`).
+**Config file** (persistent, recommended for daily use):
+```bash
+mkdir -p ~/.config/ibkr-flex
+cat > ~/.config/ibkr-flex/config <<EOF
+IBKR_FLEX_TOKEN=1111222233334444
+IBKR_FLEX_QUERY_ID=1234567
+EOF
+chmod 600 ~/.config/ibkr-flex/config
+```
+
+Default path is `${XDG_CONFIG_HOME:-$HOME/.config}/ibkr-flex/config`. Override with `IBKR_FLEX_CONFIG=/path/to/other/file` if you keep configs elsewhere.
 
 ## 4. Verify
 

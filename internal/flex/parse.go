@@ -36,6 +36,8 @@ func Parse(body []byte) (*Statement, error) {
 			stmt.NAVEntries = append(stmt.NAVEntries, decodeNAV(newExtractor(start)))
 		case "MTMPerformanceSummaryUnderlying":
 			stmt.MTMEntries = append(stmt.MTMEntries, decodeMTM(newExtractor(start)))
+		case "ChangeInNAV":
+			stmt.NAVChanges = append(stmt.NAVChanges, decodeNAVChange(newExtractor(start)))
 		}
 	}
 	return stmt, nil
@@ -191,6 +193,31 @@ func decodeMTM(e *extractor) MTMEntry {
 		Currency: e.take("currency"),
 		Account:  e.take("accountId"),
 		Extra:    e.extra(),
+	}
+}
+
+func decodeNAVChange(e *extractor) NAVChange {
+	return NAVChange{
+		Date:                     e.takeDate("fromDate", "toDate"),
+		Currency:                 e.take("currency"),
+		StartingValue:            e.takeFloat("startingValue"),
+		EndingValue:              e.takeFloat("endingValue"),
+		MTM:                      e.takeFloat("mtm"),
+		Realized:                 e.takeFloat("realized"),
+		ChangeInUnrealized:       e.takeFloat("changeInUnrealized"),
+		FxTranslation:            e.takeFloat("fxTranslation"),
+		NetFxTrading:             e.takeFloat("netFxTrading"),
+		Dividends:                e.takeFloat("dividends"),
+		ChangeInDividendAccruals: e.takeFloat("changeInDividendAccruals"),
+		Interest:                 e.takeFloat("interest"),
+		Commissions:              e.takeFloat("commissions"),
+		OtherFees:                e.takeFloat("otherFees"),
+		WithholdingTax:           e.takeFloat("withholdingTax"),
+		DepositsWithdrawals:      e.takeFloat("depositsWithdrawals"),
+		GrantActivity:            e.takeFloat("grantActivity"),
+		TWR:                      e.takeFloat("twr"),
+		Account:                  e.take("accountId"),
+		Extra:                    e.extra(),
 	}
 }
 

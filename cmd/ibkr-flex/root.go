@@ -57,6 +57,7 @@ See docs/flex-setup.md for IBKR backend setup.`,
 		newDividendsCmd(),
 		newNAVCmd(),
 		newMTMCmd(),
+		newPnLCmd(),
 	)
 	return root
 }

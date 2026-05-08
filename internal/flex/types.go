@@ -66,6 +66,29 @@ type MTMEntry struct {
 	Extra    map[string]string `json:"extra,omitempty"`
 }
 
+type NAVChange struct {
+	Date                     string            `json:"date"`
+	Currency                 string            `json:"currency"`
+	StartingValue            float64           `json:"startingValue"`
+	EndingValue              float64           `json:"endingValue"`
+	MTM                      float64           `json:"mtm"`
+	Realized                 float64           `json:"realized"`
+	ChangeInUnrealized       float64           `json:"changeInUnrealized"`
+	FxTranslation            float64           `json:"fxTranslation"`
+	NetFxTrading             float64           `json:"netFxTrading"`
+	Dividends                float64           `json:"dividends"`
+	ChangeInDividendAccruals float64           `json:"changeInDividendAccruals"`
+	Interest                 float64           `json:"interest"`
+	Commissions              float64           `json:"commissions"`
+	OtherFees                float64           `json:"otherFees"`
+	WithholdingTax           float64           `json:"withholdingTax"`
+	DepositsWithdrawals      float64           `json:"depositsWithdrawals"`
+	GrantActivity            float64           `json:"grantActivity"`
+	TWR                      float64           `json:"twr"`
+	Account                  string            `json:"account"`
+	Extra                    map[string]string `json:"extra,omitempty"`
+}
+
 type Statement struct {
 	Trades     []Trade
 	Positions  []Position
@@ -73,4 +96,5 @@ type Statement struct {
 	Dividends  []Dividend
 	NAVEntries []NAVEntry
 	MTMEntries []MTMEntry
+	NAVChanges []NAVChange
 }

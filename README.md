@@ -21,12 +21,25 @@ go build -o ibkr-flex ./cmd/ibkr-flex
 ## Setup
 
 1. Generate a Flex Token and configure a bundled Activity Flex Query in the IBKR client portal — full walkthrough in [docs/flex-setup.md](docs/flex-setup.md).
-2. Export:
+2. Provide the credentials via either env vars or a config file (env wins when both are set):
 
+   **Option A — env vars** (transient):
    ```bash
-   export IBKR_FLEX_TOKEN=...     # 16-digit token
-   export IBKR_FLEX_QUERY_ID=...  # 7-digit Query ID
+   export IBKR_FLEX_TOKEN=...
+   export IBKR_FLEX_QUERY_ID=...
    ```
+
+   **Option B — config file** (persistent across sessions):
+   ```bash
+   mkdir -p ~/.config/ibkr-flex
+   cat > ~/.config/ibkr-flex/config <<EOF
+   IBKR_FLEX_TOKEN=...
+   IBKR_FLEX_QUERY_ID=...
+   EOF
+   chmod 600 ~/.config/ibkr-flex/config
+   ```
+
+   The default path is `${XDG_CONFIG_HOME:-$HOME/.config}/ibkr-flex/config`; override with `IBKR_FLEX_CONFIG=/some/other/path`.
 
 3. Verify:
 
@@ -40,13 +53,17 @@ go build -o ibkr-flex ./cmd/ibkr-flex
 # List account IDs visible to the token
 ibkr-flex accounts
 
-# Trades, positions, cash, dividends, NAV, MTM (each requires --account)
+# Data slices (each requires --account)
 ibkr-flex trades     --account U1234567
 ibkr-flex positions  --account U1234567
 ibkr-flex cash       --account U1234567
 ibkr-flex dividends  --account U1234567
 ibkr-flex nav        --account U1234567
 ibkr-flex mtm        --account U1234567
+
+# Daily P&L attribution (mtm / fx / dividends / commissions / withholding / ...)
+ibkr-flex pnl        --account U1234567
+ibkr-flex pnl --summary --account U1234567   # cumulative components across the period
 
 # Date filter (client-side, applies to the section's primary date field)
 ibkr-flex trades --account U1234567 --since 2026-04-01 --until 2026-05-01
@@ -83,6 +100,7 @@ Field reference per section (subject to IBKR's ongoing schema additions):
 - `dividends`: date, symbol, amount, currency, account, extra
 - `nav`: date, total, currency, account, extra
 - `mtm`: date, symbol, mtm, currency, account, extra
+- `pnl`: date, currency, startingValue, endingValue, mtm, realized, changeInUnrealized, fxTranslation, netFxTrading, dividends, changeInDividendAccruals, interest, commissions, otherFees, withholdingTax, depositsWithdrawals, grantActivity, twr, account, extra
 
 ## Exit codes
 
