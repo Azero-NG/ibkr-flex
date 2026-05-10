@@ -6,6 +6,8 @@ Read-only Go CLI for the IBKR Flex Web Service. Pulls one bundled Activity Flex 
 
 ## Install
 
+### CLI
+
 ```bash
 go install github.com/azero/ibkr-flex/cmd/ibkr-flex@latest
 ```
@@ -13,10 +15,32 @@ go install github.com/azero/ibkr-flex/cmd/ibkr-flex@latest
 Or build from source:
 
 ```bash
-git clone <this repo>
-cd ibkr
+git clone https://github.com/Azero-NG/ibkr-flex.git
+cd ibkr-flex
 go build -o ibkr-flex ./cmd/ibkr-flex
 ```
+
+### Claude Code skill (optional)
+
+This repo ships an [`ibkr-flex` skill](skills/ibkr-flex/SKILL.md) — common analysis recipes, IBKR data quirks, and the read-only guarantee — so you can ask portfolio questions in natural language (`我的持仓`, `how much have I made`, `recent trades`) without re-explaining the schema every session.
+
+One-line install via [`vercel-labs/skills`](https://github.com/vercel-labs/skills):
+
+```bash
+# Global — available in any project
+npx skills add https://github.com/Azero-NG/ibkr-flex/tree/main/skills/ibkr-flex -g -a claude-code
+
+# Or project-scoped — installs into the current project's .claude/skills/
+npx skills add https://github.com/Azero-NG/ibkr-flex/tree/main/skills/ibkr-flex -a claude-code
+```
+
+After installing, edit the installed `SKILL.md` to replace the example values with yours:
+
+- **Account ID** (e.g., `U1234567`) — your IBKR account
+- **Flex Query ID** (e.g., `1234567`) — the bundled Activity Flex Query you configured in [docs/flex-setup.md](docs/flex-setup.md)
+- **Account base currency** — for multi-currency totals
+
+The skill assumes the CLI is on `PATH` as `ibkr-flex` (default after `go install`: `~/go/bin/ibkr-flex`).
 
 ## Setup
 
@@ -111,37 +135,6 @@ Field reference per section (subject to IBKR's ongoing schema additions):
 | 2 | Auth or Flex error (invalid token, invalid query ID, etc.) |
 | 3 | Flex report generation timed out (>60s) |
 | 4 | Other (parse error, network, unknown) |
-
-## Claude Code skill
-
-This repo ships a [Claude Code](https://claude.com/claude-code) skill at `.claude/skills/ibkr-flex/` that teaches Claude how to drive this CLI — common analysis recipes, IBKR data quirks, the canonical "how much have I made" answer, and the read-only guarantee — so you can ask portfolio questions in natural language (`我的持仓`, `how much have I made`, `recent trades`) without re-explaining the schema every session.
-
-### Project-level (auto-loaded)
-
-Claude Code auto-loads skills under `.claude/skills/` of the current project. When you launch Claude Code inside this repo, the skill is already active — no install step.
-
-```bash
-git clone https://github.com/Azero-NG/ibkr-flex.git
-cd ibkr-flex
-claude   # the ibkr-flex skill is now available in this session
-```
-
-### User-level (available in any directory)
-
-Symlink the skill into your global skills directory:
-
-```bash
-mkdir -p ~/.claude/skills
-ln -s "$(pwd)/.claude/skills/ibkr-flex" ~/.claude/skills/ibkr-flex
-```
-
-After installing (either path), edit `SKILL.md` to replace the example values with yours:
-
-- **Account ID** (e.g., `U1234567`) — your IBKR account
-- **Flex Query ID** (e.g., `1234567`) — the bundled Activity Flex Query you configured in [docs/flex-setup.md](docs/flex-setup.md)
-- **Account base currency** — for multi-currency totals
-
-The skill assumes the binary is on `PATH` as `ibkr-flex` (default location: `~/go/bin/ibkr-flex` after `go install`).
 
 ## Read-only guarantee
 
