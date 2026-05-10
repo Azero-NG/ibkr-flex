@@ -9,7 +9,7 @@ Read-only Go CLI for the IBKR Flex Web Service. Pulls one bundled Activity Flex 
 ### CLI
 
 ```bash
-go install github.com/azero/ibkr-flex/cmd/ibkr-flex@latest
+go install github.com/Azero-NG/ibkr-flex/cmd/ibkr-flex@latest
 ```
 
 Or build from source:
@@ -28,10 +28,10 @@ One-line install via [`vercel-labs/skills`](https://github.com/vercel-labs/skill
 
 ```bash
 # Global — available in any project
-npx skills add https://github.com/Azero-NG/ibkr-flex/tree/main/skills/ibkr-flex -g -a claude-code
+npx skills add Azero-NG/ibkr-flex -g
 
 # Or project-scoped — installs into the current project's .claude/skills/
-npx skills add https://github.com/Azero-NG/ibkr-flex/tree/main/skills/ibkr-flex -a claude-code
+npx skills add Azero-NG/ibkr-flex
 ```
 
 After installing, edit the installed `SKILL.md` to replace the example values with yours:

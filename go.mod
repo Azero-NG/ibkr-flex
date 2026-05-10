@@ -1,4 +1,4 @@
-module github.com/azero/ibkr-flex
+module github.com/Azero-NG/ibkr-flex
 
 go 1.25.7
 

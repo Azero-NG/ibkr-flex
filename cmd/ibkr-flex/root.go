@@ -9,9 +9,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/azero/ibkr-flex/internal/cache"
-	"github.com/azero/ibkr-flex/internal/config"
-	"github.com/azero/ibkr-flex/internal/flex"
+	"github.com/Azero-NG/ibkr-flex/internal/cache"
+	"github.com/Azero-NG/ibkr-flex/internal/config"
+	"github.com/Azero-NG/ibkr-flex/internal/flex"
 )
 
 type globalFlags struct {

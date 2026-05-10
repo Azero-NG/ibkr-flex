@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"text/tabwriter"
 
-	"github.com/azero/ibkr-flex/internal/flex"
+	"github.com/Azero-NG/ibkr-flex/internal/flex"
 )
 
 func renderJSON(v any) error {
